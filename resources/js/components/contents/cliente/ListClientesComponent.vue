@@ -54,7 +54,7 @@
                     <tbody v-if="currentClientes.length>0">
                         <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index">
                             <td class="text-center">{{index+1}}</td>
-                            <td><a href="#" @click.prevent="detail(cliente.id)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
+                            <td><a href="#" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
                             <td class="text-center">{{cliente.nro_telefono}}</td>
                             <td>{{cliente.direccion}}</td>
@@ -121,8 +121,9 @@ export default {
                 //error
             });
         },
-        detail(id){
-            console.log(id);
+        detail(cliente){
+            this.$store.state.currentContent = this.$store.state.subItems[6];
+            this.$store.state.clienteDetail = cliente;
         },
         editCliente(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[4];

@@ -6,6 +6,7 @@ export default {
 		clienteEdit: "",
 		clienteEdited: "",
 		clienteRemove: "",
+		clienteDetail: "",
 		clienteRemoved: "",
 		currentContent: {},
 		subItems: [
@@ -44,12 +45,28 @@ export default {
 				id: 5,
 				parent: 1,
 				inMenu: false
+			},
+			{
+				title: "Detalle de Cliente",
+				id: 6,
+				parent: 1,
+				inMenu: false
 			}
-		]
+		],
+		concesionarios: [],
     },
 	getters: {},
 	actions: {},
 	mutations: {
-        
+		loadConcesionarios(state){
+            const url = "/getting/concesionarios";
+            axios.get(url).then(function (response) {
+				state.concesionarios = response.data;  
+				
+            }).catch(function (error) {
+                //error
+			});
+			
+		}
     }
 }

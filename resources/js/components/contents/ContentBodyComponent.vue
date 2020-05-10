@@ -15,6 +15,9 @@
         <div class="col-md-12" v-if="$store.state.currentContent.id==5">
             <remove-cliente-component></remove-cliente-component>
         </div>
+        <div class="col-md-12" v-if="$store.state.currentContent.id==6">
+            <detail-cliente-component></detail-cliente-component>
+        </div>
     </div>
 </template>
 
@@ -25,6 +28,7 @@ import ListClientesComponent from './cliente/ListClientesComponent.vue';
 import PanelComponent from './PanelComponent.vue';
 import EditClienteComponent from './cliente/EditClienteComponent.vue';
 import RemoveClienteComponent from './cliente/RemoveClienteComponent.vue';
+import DetailClienteComponent from './cliente/DetailClienteComponent.vue';
 
 export default {
     props: ['content'],
@@ -38,7 +42,8 @@ export default {
         ListClientesComponent,
         PanelComponent,
         EditClienteComponent,
-        RemoveClienteComponent
+        RemoveClienteComponent,
+        DetailClienteComponent
     }
 }
 </script>
