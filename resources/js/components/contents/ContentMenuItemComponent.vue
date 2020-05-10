@@ -1,10 +1,10 @@
 <template>
     <div class="card">
         <div class="card-header" >
-            {{$store.state.titleContent}}
+            {{$store.state.currentContent.title}}
         </div>
         <div class="card-body">
-            <content-body-component :content="thisContent"></content-body-component>
+            <content-body-component></content-body-component>
         </div>
     </div>
 </template>
@@ -14,16 +14,19 @@
 import ContentBodyComponent from './ContentBodyComponent.vue';
 
 export default {
-    name: "content-menu-item",    
-    props: ['thisContent'],
+    name: "content-menu-item", 
     components: { ContentBodyComponent },
     data(){
         return {
-            title: ""
         }
     },
     created(){
-        this.$store.state.titleContent = this.thisContent;
+        this.thisContent = {
+            title: "Panel Principal",
+            id: 3,
+            parent: 0
+        };
+        this.$store.state.titleContent = this.thisContent.title;
     },
     methods: {
         

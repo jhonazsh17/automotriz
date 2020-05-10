@@ -24,7 +24,7 @@ class CreateClientesTable extends Migration
             $table->string('provincia', 50);
             $table->string('departamento', 50);
             $table->string('nro_telefono', 10);
-            $table->date('fecha_nacimiento');
+            $table->date('fecha_nacimiento')->nullable();
             $table->enum('estado', ['1', '0']);
             $table->unsignedBigInteger('concesionario_id');
             $table->foreign('concesionario_id')->references('id')->on('concesionarios');

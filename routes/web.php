@@ -28,6 +28,7 @@ Route::get('/getting/concesionarios', 'ConcesionarioController@getAll');
 
 //-> Routes for clientes
 Route::post('/sending/cliente', 'ClienteController@save');
+Route::put('/sending/new/changes/cliente', 'ClienteController@saveUpdate');
 Route::get('/getting/clientes', 'ClienteController@getAll');
 Route::put('/removing/cliente', 'ClienteController@remove');
 

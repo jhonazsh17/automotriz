@@ -19,7 +19,7 @@ class Cliente extends Model
         'departamento',
         'nro_telefono',
         'fecha_nacimiento',
-        'concesionario_id',   
-        'estado'      
+        'estado',
+        'concesionario_id', 
     ];
 }

@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div class="alert alert-warning" role="alert" v-if="alertState">
+            Revisar que todos los datos obligatorios con  <a href="#" class="alert-link">(*) asterisco</a> no esten vacíos.
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group margin-supr-bottom-5">
@@ -110,26 +113,38 @@ export default {
                 distrito: "",
                 fechaNacimiento: "",
                 concesionario: ""
-            }
+            },
+            alertState: false,
         }    
     },
     created() {
         this.ubigeo = new Ubigeo();
         this.departamentos = this.ubigeo.getRegions();
         this.getAllConcesionarios();
+        this.$store.state.clienteEdited = "";
+        this.$store.state.clienteInserted = "";
+        this.$store.state.clienteRemoved = "";
     },
     methods: {    
         saveCliente(){
             var _this = this;
             const url = "/sending/cliente";
-            axios.post(url, this.cliente).then(function (response) {
-                console.log(response);
-                // if(response.data==1){ 
-                //     console.log('Ha sido registrado el cliente.');    
-                // }   
-            }).catch(function (error) {
-                console.log(error);
-            });
+
+            if(this.validateInputs()){
+                axios.post(url, this.cliente).then(function (response) {
+                    _this.$store.state.clienteInserted = response.data;
+                    _this.$store.state.currentContent = _this.$store.state.subItems[2];                
+                }).catch(function (error) {
+                    //error
+                });
+            }else{
+                this.alertState = true;
+                setTimeout(function(){
+                    _this.alertState = false;
+                }, 2000);
+                
+            }
+            
         },
         getAllConcesionarios(){
             var _this = this;
@@ -137,11 +152,24 @@ export default {
             axios.get(url).then(function (response) {
                 _this.concesionarios = response.data;  
             }).catch(function (error) {
-                console.log(error);
+                //error
             });
         },
-    },    
-    computed: {    
+        validateInputs(){
+            if(this.cliente.concesionarios!=""&&
+                this.cliente.departamentos!=""&&
+                this.cliente.provincias!=""&&
+                this.cliente.distritos!=""&&
+                this.cliente.nombres!=""&&
+                this.cliente.apellidos!=""&&
+                this.cliente.dni!=""&&
+                this.cliente.telefono!=""&&
+                this.cliente.direccion!=""){
+                    return true;
+            }else{
+                return false;
+            }
+        },  
         changeDepartamento(){
             this.provincias = this.ubigeo.getRegions(this.cliente.departamento).provinces();            console.log(this.provincias);
         },

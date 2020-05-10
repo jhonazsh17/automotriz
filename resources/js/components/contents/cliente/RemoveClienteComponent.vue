@@ -5,7 +5,7 @@
             ¿Estás seguro de realizar esta acción?
         </p>
         <div>
-            <button class="btn btn-danger" @click="eliminar()">
+            <button class="btn btn-danger" @click="eliminar(cliente)">
                 Eliminar
             </button>
             <button class="btn btn-light" @click="backList()">
@@ -17,25 +17,29 @@
 
 <script>
 export default {
-    props: ['clienteRemove'],
     data(){
         return {
-            cliente: this.clienteRemove
+            cliente: this.$store.state.clienteRemove
         }    
     },
     methods:{
-        eliminar(){
-            console.log('holita');
+        eliminar(cliente){
             var _this = this;
             const url = "/removing/cliente";
-            axios.put(url, this.cliente).then(function (response) {
-                console.log(response); 
+            console.log(cliente);
+            axios.put(url, cliente).then(function (response) {
+                console.log(response.data);
+                _this.$store.state.clienteRemoved = response.data;
+                _this.$store.state.currentContent = _this.$store.state.subItems[2];
             }).catch(function (error) {
                 console.log(error);
             });
         },
         backList(){
-            console.log('hola');
+            this.$store.state.clienteRemoved = "";
+            this.$store.state.clienteEdited = "";
+            this.$store.state.clienteInserted = "";
+            this.$store.state.currentContent = this.$store.state.subItems[2];
         }
     }
 }

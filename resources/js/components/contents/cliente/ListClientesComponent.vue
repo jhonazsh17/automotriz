@@ -1,6 +1,15 @@
 <template>
     <div>
-        <div v-if="list" >
+        <div class="alert alert-success" role="alert" v-if="$store.state.clienteEdited!=''">
+            Se ha actualizado el cliente <b>[{{$store.state.clienteEdited.nombres}} {{$store.state.clienteEdited.apellidos}}], con éxito</b>. 
+        </div>
+        <div class="alert alert-success" role="alert" v-if="$store.state.clienteInserted!=''">
+            Se ha creado el cliente <b>[{{$store.state.clienteInserted.nombres}} {{$store.state.clienteInserted.apellidos}}], con éxito</b>. 
+        </div>
+        <div class="alert alert-success" role="alert" v-if="$store.state.clienteRemoved!=''">
+            Se ha eliminado el cliente <b>[{{$store.state.clienteRemoved.nombres}} {{$store.state.clienteRemoved.apellidos}}]</b>. 
+        </div>
+        <div>
             <div v-if="loading" class="text-center">
                 Cargando...
             </div>
@@ -42,8 +51,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody v-if="clientes.length>0">
-                        <tr  v-for="(cliente, index) in clientes" v-bind:key="index">
+                    <tbody v-if="currentClientes.length>0">
+                        <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index">
                             <td class="text-center">{{index+1}}</td>
                             <td><a href="#" @click.prevent="detail(cliente.id)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
@@ -71,20 +80,10 @@
             
         </div>
 
-        <div v-if="edit">
-            <edit-cliente-component :clienteEdit="thisCliente"></edit-cliente-component>
-        </div>
-
-        <div v-if="remove">
-            <remove-cliente-component :clienteRemove="thisCliente"></remove-cliente-component>
-        </div>
     </div>
 </template>
 
 <script>
-
-import EditClienteComponent from './EditClienteComponent.vue';
-import RemoveClienteComponent from './RemoveClienteComponent.vue';
 
 export default {
     data(){
@@ -92,20 +91,19 @@ export default {
             load: "loading.gif",
             loading: true,
             clientes: [],
+            currentClientes: [],
             ubigeo:"",
-            list: true,
-            edit: false,
-            remove: false,
-            thisCliente: {}
         }
-    },
-    components: {
-        EditClienteComponent,
-        RemoveClienteComponent
     },
     created(){
         this.getAllClientes();
         this.ubigeo = new Ubigeo();
+        var _this = this;
+        setTimeout(function(){
+            _this.$store.state.clienteEdited = "";
+            _this.$store.state.clienteInserted = "";
+            _this.$store.state.clienteRemoved = "";
+        }, 3000);
     },
     methods: {
         getAllClientes(){
@@ -113,26 +111,26 @@ export default {
             const url = "/getting/clientes";
             axios.get(url).then(function (response) {
                 _this.clientes = response.data;
+                _this.clientes.forEach(function(element){
+                    if(element.estado==1){
+                        _this.currentClientes.push(element); 
+                    }
+                });
                 _this.loading = false;
-                console.log(response.data);
             }).catch(function (error) {
-                console.log(error);
+                //error
             });
         },
         detail(id){
             console.log(id);
         },
         editCliente(cliente){
-            this.list = false;
-            this.edit = true;
-            this.remove = false;
-            this.thisCliente = cliente;
+            this.$store.state.currentContent = this.$store.state.subItems[4];
+            this.$store.state.clienteEdit = cliente;
         },
         removeCliente(cliente){
-            this.list = false;
-            this.edit = false;
-            this.remove = true;
-            this.thisCliente = cliente;
+            this.$store.state.currentContent = this.$store.state.subItems[5];
+            this.$store.state.clienteRemove = cliente;
         }
     }
 }

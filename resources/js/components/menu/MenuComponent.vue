@@ -4,7 +4,7 @@
             <ul class="nav flex-column " >
                 <li class="nav-item " v-for="(item, index) in items" v-bind:key="index" >
                     <a class="nav-link list-menu" href="#" >{{item.title}}</a>
-                    <submenu-component :parent="item.id" v-on:getEmitContent="showContent"></submenu-component> 
+                    <submenu-component :parent="item.id"></submenu-component> 
                 </li>
             </ul>
         </div>
@@ -33,10 +33,7 @@ export default {
     mounted(){
 
     },
-    methods:{ 
-        showContent(value){
-            this.$emit('content', value);
-        },
+    methods:{
     },
     components: { SubmenuComponent }
 }
