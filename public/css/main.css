@@ -1,0 +1,49 @@
+.padding-supr {
+  padding: 0;
+}
+.padding-supr-right-7 {
+  padding-right: 7px;
+}
+.padding-supr-left-7 {
+  padding-left: 7px;
+}
+.padding-supr-right-5 {
+  padding-right: 5px;
+}
+.padding-supr-left-5 {
+  padding-left: 5px;
+}
+.margin-supr {
+  margin: 0;
+}
+.margin-supr-bottom-5 {
+  margin-bottom: 5px;
+}
+.list-submenu {
+  margin-left: 10px;
+  border-left: 3px solid #16a085;
+}
+.list-submenu>ul>li>a {
+  color: #868484;
+}
+.list-submenu>ul>li>a:hover {
+  color: #848484;
+  background-color: #bcfff2;
+}
+.list-menu {
+  background-color: #fbfafa;
+  color: #868484;
+}
+.list-menu:hover {
+  background-color: #bcfff2;
+  color: #868484;
+}
+.green-navbar {
+  background-color: #16a085;
+}
+.card {
+  border-radius: 0;
+}
+.table {
+  margin-bottom: 0;
+}
