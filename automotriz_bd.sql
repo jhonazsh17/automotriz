@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-05-2020 a las 10:50:16
+-- Tiempo de generación: 11-05-2020 a las 11:42:01
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.1
 
@@ -153,7 +153,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Jhon Felipe Medina Zapata', 'jhonazsh.17@gmail.com', NULL, '$2y$10$x3Wl5ztZQPGG4rnTw7uqRusoGAlla1usaSprLM2Vbp0nC6H5nNeCC', NULL, '2020-05-10 12:40:42', '2020-05-10 12:40:42');
+(1, 'Admin', 'admin@gmail.com', NULL, '$2y$10$x3Wl5ztZQPGG4rnTw7uqRusoGAlla1usaSprLM2Vbp0nC6H5nNeCC', NULL, '2020-05-10 12:40:42', '2020-05-10 12:40:42');
 
 --
 -- Índices para tablas volcadas
