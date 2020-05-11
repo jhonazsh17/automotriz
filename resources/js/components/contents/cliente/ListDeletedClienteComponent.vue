@@ -8,7 +8,7 @@
             <div v-else>
                 <div class="row">
                     <div class="col-md-4">
-                        <input class="form-control" placeholder="Buscar Cliente"/>
+                        <input class="form-control" placeholder="Buscar por Nombres y Apellidos" @keyup="filterByName()" v-model="wordSearch"/>
                     </div>
                     
                 </div>
@@ -25,7 +25,7 @@
                                 DNI
                             </th>
                             <th>
-                                Teléfono
+                                Concesionario
                             </th>
                             <th>
                                 Dirección
@@ -49,31 +49,30 @@
                             <td class="text-center">{{index+1}}</td>
                             <td><a href="#" style="color:#bbb" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
-                            <td class="text-center">{{cliente.nro_telefono}}</td>
+                            <td class="text-center">{{cliente.concesionario_id}}</td>
                             <td>{{cliente.direccion}}</td>
                             <td class="text-center">{{ubigeo.getDistricts(cliente.ciudad).name}}</td>
                             <td class="text-center">{{ubigeo.getProvinces(cliente.provincia).name}}</td>
                             <td class="text-center">{{ubigeo.getRegions(cliente.departamento).name}}</td>
                             <td width="200px" class="text-center">
-                                <button class="btn btn-light btn-sm" @click="editCliente(cliente)"><i class="far fa-edit"></i> Restablecer</button>
+                                <button class="btn btn-light btn-sm" @click="resetCliente(cliente)"><i class="fas fa-user-check"></i>&nbsp; Restablecer</button>
                             </td>
                         </tr>
                     </tbody>
                     <tbody v-else>
                         <tr class="text-center">
                             <td colspan="9">
-                                Aún no tienes Clientes en la Base de Datos.
+                                Aún no tienes Clientes Eliminados.
                             </td>   
                         </tr>      
                     </tbody>
                     
                 </table>
-                <hr>
+                <hr>  
                 <div>
-                    <button class="btn btn-light">
-                        <i class="fas fa-trash-restore-alt"></i> Clientes Eliminados
-                    </button>
+                    <button class="btn btn-light" @click="backList()"><i class="fa fa-arrow-left" ></i> &nbsp;Volver</button>
                 </div>
+                
             </div>
             
         </div>
@@ -91,11 +90,11 @@ export default {
             clientes: [],
             currentClientes: [],
             ubigeo:"",
+            wordSearch:""
         }
     },
     created(){
         this.getAllClientes();
-        this.getAllConcesionarios();
         this.ubigeo = new Ubigeo();
         var _this = this;
         setTimeout(function(){
@@ -107,13 +106,15 @@ export default {
     },
     methods: {
         getAllClientes(){
-            var _this = this;
             const url = "/getting/clientes";
+            var _this = this;
             axios.get(url).then(function (response) {
+                _this.currentClientes = [];
                 _this.clientes = response.data;
+                this.$store.state.currentContent = this.$store.state.subItems[2];
                 _this.clientes.forEach(function(element){
-                    if(element.estado==0){
-                        _this.currentClientes.push(element); 
+                    if(element.estado=='0'){
+                        _this.currentClientes.push(element);
                     }
                 });
                 _this.loading = false;
@@ -121,29 +122,47 @@ export default {
                 //error
             });
         },
-        getAllConcesionarios(){
+        filterByName(){
             var _this = this;
-            const url = "/getting/concesionarios";
+            if(this.wordSearch!=""){
+                const url = "/getting/clientes/by/name/"+this.wordSearch;
+                _this.clientes = [];
+                this.axiosGetClientes(url);
+            }else{
+                this.getAllClientes();
+            }
+            
+        },
+        axiosGetClientes(url){
+            var _this = this;
             axios.get(url).then(function (response) {
-				_this.concesionarios = response.data; 
+                _this.currentClientes = [];
+                _this.clientes = response.data;
+                _this.clientes.forEach(function(element){
+                    if(element.estado=='0'){
+                        _this.currentClientes.push(element);
+                    }
+                });
+                _this.loading = false;
             }).catch(function (error) {
                 //error
-			});
+            });
         },
         detail(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[6];
             this.$store.state.clienteDetail = cliente;
         },
-        editCliente(cliente){
-            this.$store.state.currentContent = this.$store.state.subItems[4];
-            this.$store.state.clienteEdit = cliente;
+        resetCliente(cliente){
+            var _this = this;
+            const url = "/resetting/cliente/"+cliente.id;
+            axios.put(url).then(function (response) {
+                console.log(response.data);
+            }).catch(function (error) {
+                //error
+            });
         },
-        removeCliente(cliente){
-            this.$store.state.currentContent = this.$store.state.subItems[5];
-            this.$store.state.clienteRemove = cliente;
-        },
-        goCrearCliente(cliente){
-            this.$store.state.currentContent = this.$store.state.subItems[1];
+        backList(cliente){
+            this.$store.state.currentContent = this.$store.state.subItems[2];
         }
     }
 }

@@ -22,4 +22,11 @@ class Cliente extends Model
         'estado',
         'concesionario_id', 
     ];
+
+    public function concesionario()
+    {
+        return $this->belongsTo('App\Concesionario', 'concesionario_id');
+    }
+
+    
 }

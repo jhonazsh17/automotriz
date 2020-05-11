@@ -31,5 +31,9 @@ Route::post('/sending/cliente', 'ClienteController@save');
 Route::put('/sending/new/changes/cliente', 'ClienteController@saveUpdate');
 Route::get('/getting/clientes', 'ClienteController@getAll');
 Route::put('/removing/cliente', 'ClienteController@remove');
+Route::put('/resetting/cliente/{idCliente}', 'ClienteController@resetCliente');
+Route::get('/getting/clientes/by/concesionario/{idConcesionario}', 'ClienteController@getClienteByConcesionario');
+Route::get('/getting/clientes/by/name/{word}', 'ClienteController@getClienteByName');
+Route::get('/getting/clientes/by/doc/{doc}', 'ClienteController@getClienteByDoc');
 
 //-----> End Routes for axios request <-----//

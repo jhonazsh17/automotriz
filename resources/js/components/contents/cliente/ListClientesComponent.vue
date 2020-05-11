@@ -15,26 +15,33 @@
             </div>
             <div v-else>
                 <div class="row">
-                    <div class="col-md-4 padding-supr-right-7">
-                        <input class="form-control" placeholder="Buscar Cliente"/>
+                    <div class="col-md-3 padding-supr-right-7">
+                        <input class="form-control" @keyup="filterByName()" v-model="wordSearch" placeholder="Buscar por Nombres y Apellidos"/>
                     </div>
-                    <div class="col-md-4 padding-supr-left-7">
+                    <div class="col-md-3 padding-supr-left-7 padding-supr-right-7">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Buscar por DNI" @keyup="filterByDoc()" v-model="filterDoc">
+                        </div>
+                    </div>
+                    <div class="col-md-3 padding-supr-left-7 padding-supr-rigth-7">
                         <div class="btn-group">
                             
-                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Concesionarios
-                            </button>
-                            <div class="dropdown-menu">
-                                <a v-for="(concesionario, index) in concesionarios" :key="index" class="dropdown-item" href="#">
-                                    {{concesionario.nombre}}
-                                </a>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa fa-filter"></i></label>
+                                </div>
+                                <select class="custom-select" @change="filterConcesionario()" v-model="filterValue">
+                                    <option selected value="Todos Concesionarios">Todos Concesionarios</option>
+                                    <option v-for="(concesionario, index) in concesionarios" :key="index" v-bind:value="concesionario.id" >{{concesionario.nombre}}</option>
+                                    
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 padding-supr-left-7 text-right">
+                    
+                    <div class="col-md-3 text-right">
                         <div class="btn-group">
-                            
-                            <button @click="goCrearCliente()" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button @click="goCrearCliente()" class="btn btn-success" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Crear Cliente
                             </button>
                         </div>
@@ -53,7 +60,7 @@
                                 DNI
                             </th>
                             <th>
-                                Teléfono
+                                Concesionario
                             </th>
                             <th>
                                 Dirección
@@ -77,7 +84,7 @@
                             <td class="text-center">{{index+1}}</td>
                             <td><a href="#" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
-                            <td class="text-center">{{cliente.nro_telefono}}</td>
+                            <td class="text-center">{{cliente.concesionario_id}}</td>
                             <td>{{cliente.direccion}}</td>
                             <td class="text-center">{{ubigeo.getDistricts(cliente.ciudad).name}}</td>
                             <td class="text-center">{{ubigeo.getProvinces(cliente.provincia).name}}</td>
@@ -91,7 +98,7 @@
                     <tbody v-else>
                         <tr class="text-center">
                             <td colspan="9">
-                                Aún no tienes Clientes en la Base de Datos.
+                                No hay Clientes.
                             </td>   
                         </tr>      
                     </tbody>
@@ -99,9 +106,29 @@
                 </table>
                 <hr>
                 <div>
-                    <button class="btn btn-light" @click="goClientesDeleted()">
-                        <i class="fas fa-trash-restore-alt" ></i> Clientes Eliminados
-                    </button>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-light" @click="goClientesDeleted()">
+                                <i class="fas fa-trash-restore-alt" ></i> Clientes Eliminados
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             
@@ -120,7 +147,10 @@ export default {
             clientes: [],
             currentClientes: [],
             ubigeo:"",
-            concesionarios: this.$store.commit('loadConcesionarios')
+            concesionarios: [],
+            filterValue: "Todos Concesionarios",
+            wordSearch: "",
+            filterDoc: ""
         }
     },
     created(){
@@ -139,17 +169,7 @@ export default {
         getAllClientes(){
             var _this = this;
             const url = "/getting/clientes";
-            axios.get(url).then(function (response) {
-                _this.clientes = response.data;
-                _this.clientes.forEach(function(element){
-                    if(element.estado==1){
-                        _this.currentClientes.push(element); 
-                    }
-                });
-                _this.loading = false;
-            }).catch(function (error) {
-                //error
-            });
+            this.axiosGetClientes(url);
         },
         getAllConcesionarios(){
             var _this = this;
@@ -159,6 +179,53 @@ export default {
             }).catch(function (error) {
                 //error
 			});
+        },
+        filterConcesionario(){
+            var _this = this;
+            if(this.filterValue!="Todos Concesionarios"){
+                const url = "/getting/clientes/by/concesionario/"+this.filterValue;
+                _this.clientes = [];
+                this.axiosGetClientes(url);
+            }else{
+                this.getAllClientes();
+            }
+        },
+        filterByName(){
+            var _this = this;
+            if(this.wordSearch!=""){
+                const url = "/getting/clientes/by/name/"+this.wordSearch;
+                _this.clientes = [];
+                this.axiosGetClientes(url);
+            }else{
+                this.getAllClientes();
+            }
+            
+        },
+        filterByDoc(){
+            var _this = this;
+            if(this.filterDoc!=""){
+                const url = "/getting/clientes/by/doc/"+this.filterDoc;
+                _this.clientes = [];
+                this.axiosGetClientes(url);
+            }else{
+                this.getAllClientes();
+            }
+            
+        },
+        axiosGetClientes(url){
+            var _this = this;
+            axios.get(url).then(function (response) {
+                _this.currentClientes = [];
+                _this.clientes = response.data;
+                _this.clientes.forEach(function(element){
+                    if(element.estado=='1'){
+                        _this.currentClientes.push(element);
+                    }
+                });
+                _this.loading = false;
+            }).catch(function (error) {
+                //error
+            });
         },
         detail(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[6];

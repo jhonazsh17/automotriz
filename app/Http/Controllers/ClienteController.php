@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Cliente;
+use App\Concesionario;
 
 class ClienteController extends Controller
 {
@@ -54,12 +55,79 @@ class ClienteController extends Controller
 
     public function getAll(){
         $clientes = Cliente::all();
-        return $clientes;
+        $clientesArray = [];
+        $i=0;
+        foreach ($clientes as $cliente) {
+            $clientesArray[$i] = $cliente;
+            $clientesArray[$i]['concesionario_name'] = $cliente->concesionario->nombre;
+            $i=$i+1;
+        }
+        return $clientesArray;
     }   
+
+    public function getClienteByConcesionario($idConcesionario){
+        $clientes = Concesionario::find($idConcesionario)->clientes;
+        return $clientes;
+    }
+
+    public function getClienteByName($word){
+        $clientes = Cliente::all();
+        $clientesArray = [];
+        $clientesFilter = [];
+        $i=0;
+        $j=0;
+        foreach ($clientes as $cliente) {
+            $clientesArray[$i]=$cliente;
+            $clientesArray[$i]['fullName'] = $cliente->nombres." ".$cliente->apellidos;
+            $i=$i+1;
+        }
+
+        foreach ($clientesArray as $cliente) {
+            if($this->compareCad($cliente['fullName'], $word)){
+                $clientesFilter[$j] = $cliente;
+                $j=$j+1;
+            }
+            
+        }
+        return $clientesFilter;
+    }
+
+    public function getClienteByDoc($doc){
+        $clientes = Cliente::all();
+        $clientesFilter = [];
+        $j=0;
+
+        foreach ($clientes as $cliente) {
+            if($this->compareCad($cliente['dni'], $doc)){
+                $clientesFilter[$j] = $cliente;
+                $j=$j+1;
+            }
+            
+        }
+        return $clientesFilter;
+    }
+
+    private function compareCad($cad, $subcad){
+        $cad = strtolower($cad);
+        $subcad = strtolower($subcad);
+        if (strpos($cad, $subcad) !== false) {
+            return true;
+        }else{
+            return false;
+        }
+    }        
 
     public function remove(Request $request){
         $cliente = Cliente::where('dni', $request->dni)->first();
-        
+        $cliente->estado = "0";
+        $cliente->save();
         return $cliente;
-    }   
+    }
+    
+    public function resetCliente($idCliente){
+        $cliente = Cliente::find($idCliente);
+        $cliente->estado = "1";
+        $cliente->save();
+        return $cliente;
+    }
 }

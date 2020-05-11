@@ -16,4 +16,8 @@ class Concesionario extends Model
         'departamento',
         'telefono',         
     ];
+
+    public function clientes(){
+        return $this->hasMany('App\Cliente', 'concesionario_id', 'id');
+    }
 }
