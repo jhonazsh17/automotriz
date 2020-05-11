@@ -1,8 +1,12 @@
 <template>
     <div>
+        <!-- Alerta de campos vacíos -->
         <div class="alert alert-warning" role="alert" v-if="alertState">
             Revisar que todos los datos obligatorios con  <a href="#" class="alert-link">(*) asterisco</a> no esten vacíos.
         </div>
+        <!-- fin -->
+
+        <!-- Select para concesionarios -->
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group margin-supr-bottom-5">
@@ -17,6 +21,9 @@
             </div>
         </div>    
         <hr>
+        <!-- fin -->
+
+        <!-- Inicio formulario de registro de clientes -->
         <form @submit.prevent="saveCliente">
             <div class="row">
                 <div class="col-md-6 padding-supr-right-7">
@@ -90,6 +97,7 @@
             
             
         </form>
+        <!-- fin -->
     </div>
 </template>
 
@@ -120,12 +128,13 @@ export default {
     created() {
         this.ubigeo = new Ubigeo();
         this.departamentos = this.ubigeo.getRegions();
-        this.getAllConcesionarios();
+        this.getAllConcesionarios(); 
         this.$store.state.clienteEdited = "";
         this.$store.state.clienteInserted = "";
         this.$store.state.clienteRemoved = "";
     },
     methods: {    
+        // función para enviar cliente a guardar
         saveCliente(){
             var _this = this;
             const url = "/sending/cliente";
@@ -144,8 +153,9 @@ export default {
                 }, 2000);
                 
             }
-            
         },
+
+        // función para obtener todos los concesionarios
         getAllConcesionarios(){
             var _this = this;
             const url = "/getting/concesionarios";
@@ -155,6 +165,8 @@ export default {
                 //error
 			});
         },
+
+        // función para validar los campos obligatorios del formulario
         validateInputs(){
             if(this.cliente.concesionarios!=""&&
                 this.cliente.departamentos!=""&&
@@ -170,9 +182,13 @@ export default {
                 return false;
             }
         },  
+
+        // función para cargar provincias cuando se elige un departamento
         changeDepartamento(){
             this.provincias = this.ubigeo.getRegions(this.cliente.departamento).provinces();            console.log(this.provincias);
         },
+
+        // función para cargar distritos cuando se elige una provincia 
         changeProvincia(){
             this.distritos = this.ubigeo.getProvinces(this.cliente.provincia).districts();            console.log(this.provincias);
         }

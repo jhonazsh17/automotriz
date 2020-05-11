@@ -1,4 +1,5 @@
 <template>
+    <!-- template del menu izquierdo -->
     <div class="card">
         <div class="card-body padding-supr">
             <ul class="nav flex-column " >
@@ -9,10 +10,12 @@
             </ul>
         </div>
     </div>
+    <!-- fin -->
     
 </template>
 
 <script>
+// importando componentes
 import SubmenuComponent from './SubMenuComponent.vue'; 
 
 export default {
@@ -29,11 +32,6 @@ export default {
                 }
             ]
         }
-    },   
-    mounted(){
-
-    },
-    methods:{
     },
     components: { SubmenuComponent }
 }

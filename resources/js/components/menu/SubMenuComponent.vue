@@ -1,4 +1,5 @@
 <template>
+    <!-- template por cada item sus subitems -->
     <div class="list-group list-submenu">
         <ul class="nav flex-column" >
             <li class="nav-item" v-for="(subItem, index) in subItems" v-bind:key="index">
@@ -6,6 +7,7 @@
             </li>
         </ul>
     </div>
+    <!-- fin -->
 </template>
 
 <script>

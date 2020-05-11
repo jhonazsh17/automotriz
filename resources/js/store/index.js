@@ -1,5 +1,6 @@
 export default {
 	state: {
+		//toda la data store
 		titleContent: "",
 		clienteInsert: "",
 		clienteInserted: "",

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- Alertas cuando se ha editado, guardado, eliminado y restablecido cliente -->
         <div class="alert alert-success" role="alert" v-if="$store.state.clienteEdited!=''">
             Se ha actualizado el cliente <b>[{{$store.state.clienteEdited.nombres}} {{$store.state.clienteEdited.apellidos}}]</b>, con éxito. 
         </div>
@@ -12,10 +13,17 @@
         <div class="alert alert-success" role="alert" v-if="$store.state.clienteReset!=''">
             Se ha restablecido el cliente <b>[{{$store.state.clienteReset.nombres}} {{$store.state.clienteReset.apellidos}}]</b>. 
         </div>
+        <!-- fin -->
+
+        <!-- template lista clientes -->
         <div>
+            <!-- template de carga antes de mostrar los datos -->
             <div v-if="loading" class="text-center">
                 Cargando...
             </div>
+            <!-- fin -->
+
+            <!-- template de la lista -->
             <div v-else>
                 <div class="row">
                     <div class="col-md-3 padding-supr-right-7">
@@ -50,6 +58,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- tabla de clientes -->
                 <table class="table table-bordered table-striped" style="margin-top:1.3em">
                     <thead>
                         <tr class="text-center">
@@ -82,6 +92,8 @@
                             </th>
                         </tr>
                     </thead>
+
+                    <!-- template de datos de clientes -->
                     <tbody v-if="currentClientes.length>0">
                         <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index">
                             <td class="text-center">{{index+1}}</td>
@@ -98,6 +110,9 @@
                             </td>
                         </tr>
                     </tbody>
+                    <!-- fin -->
+
+                    <!-- template de lista, cuando no hay clientes -->
                     <tbody v-else>
                         <tr class="text-center">
                             <td colspan="9">
@@ -105,8 +120,11 @@
                             </td>   
                         </tr>      
                     </tbody>
+                    <!-- fin -->
                     
                 </table>
+                <!-- fin -->
+
                 <hr>
                 <div>
                     <div class="row">
@@ -120,8 +138,10 @@
                     
                 </div>
             </div>
+            <!-- fin -->
             
         </div>
+        <!-- fin -->
 
     </div>
 </template>
@@ -147,6 +167,8 @@ export default {
         this.getAllConcesionarios();
         this.ubigeo = new Ubigeo();
         var _this = this;
+
+        // oculta los alerts despues de 3 segs.
         setTimeout(function(){
             _this.$store.state.clienteEdited = "";
             _this.$store.state.clienteInserted = "";
@@ -156,11 +178,14 @@ export default {
         
     },
     methods: {
+        // función que obtiene todos los clientes
         getAllClientes(){
             var _this = this;
             const url = "/getting/clientes";
             this.axiosGetClientes(url);
         },
+
+        // función que obtienes toda la lista de concesionarios
         getAllConcesionarios(){
             var _this = this;
             const url = "/getting/concesionarios";
@@ -170,10 +195,14 @@ export default {
                 //error
 			});
         },
+
+        // función para filtra clientes por concesionario en lista
         filterInListConcesionario(concesionario_id){
             this.filterValue = concesionario_id;
             this.filterConcesionario();
         },
+
+        // función para filtrar clientes por concesionario
         filterConcesionario(){
             var _this = this;
             if(this.filterValue!="Todos Concesionarios"){
@@ -184,6 +213,8 @@ export default {
                 this.getAllClientes();
             }
         },
+
+        // función para filtrar clientes por nombre
         filterByName(){
             var _this = this;
             if(this.wordSearch!=""){
@@ -195,6 +226,8 @@ export default {
             }
             
         },
+
+        // función para filtra clientes por documento de identidad
         filterByDoc(){
             var _this = this;
             if(this.filterDoc!=""){
@@ -206,6 +239,8 @@ export default {
             }
             
         },
+
+        // función que obtiene los datos de clientes de forma asincrónica
         axiosGetClientes(url){
             var _this = this;
             axios.get(url).then(function (response) {
@@ -221,21 +256,31 @@ export default {
                 //error
             });
         },
+
+        // función que muestra el template detalle del cliente 
         detail(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[6];
             this.$store.state.clienteDetail = cliente;
         },
+
+        // función que muestra el template para editar cliente
         editCliente(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[4];
             this.$store.state.clienteEdit = cliente;
         },
+
+        // función que muestra el template para eliminar cliente
         removeCliente(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[5];
             this.$store.state.clienteRemove = cliente;
         },
+
+        // función que redirige al template para crear cliente
         goCrearCliente(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[1];
         },
+
+        // función que muestra el template de lista de clientes eliminados
         goClientesDeleted(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[7];
         }

@@ -2,9 +2,13 @@
     <div>
         
         <div>
+            <!-- template de carga -->
             <div v-if="loading" class="text-center">
                 Cargando...
             </div>
+            <!-- fin -->
+
+            <!-- template de lista de clientes eliminados-->
             <div v-else>
                 <div class="row">
                     <div class="col-md-4">
@@ -44,6 +48,8 @@
                             </th>
                         </tr>
                     </thead>
+
+                    <!-- template de datos del clientes eliminados -->
                     <tbody v-if="currentClientes.length>0">
                         <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index" style="color:#bbb">
                             <td class="text-center">{{index+1}}</td>
@@ -59,6 +65,9 @@
                             </td>
                         </tr>
                     </tbody>
+                    <!-- fin -->
+
+                    <!-- template de mensaje sin clientes eliminados -->
                     <tbody v-else>
                         <tr class="text-center">
                             <td colspan="9">
@@ -66,6 +75,7 @@
                             </td>   
                         </tr>      
                     </tbody>
+                    <!-- fin -->
                     
                 </table>
                 <hr>  
@@ -74,6 +84,7 @@
                 </div>
                 
             </div>
+            <!-- fin -->
             
         </div>
 
@@ -95,16 +106,10 @@ export default {
     },
     created(){
         this.getAllClientes();
-        this.ubigeo = new Ubigeo();
-        var _this = this;
-        setTimeout(function(){
-            _this.$store.state.clienteEdited = "";
-            _this.$store.state.clienteInserted = "";
-            _this.$store.state.clienteRemoved = "";
-        }, 3000);
-        
+        this.ubigeo = new Ubigeo();        
     },
     methods: {
+        // función que obtiene los clientes eliminados
         getAllClientes(){
             const url = "/getting/clientes";
             var _this = this;
@@ -121,6 +126,8 @@ export default {
                 //error
             });
         },
+
+        // función que obtiene la lista de clientes eliminados filtrados por nombres
         filterByName(){
             var _this = this;
             if(this.wordSearch!=""){
@@ -132,6 +139,8 @@ export default {
             }
             
         },
+
+        //función que obtiene la data de clientes de forma asíncrona
         axiosGetClientes(url){
             var _this = this;
             axios.get(url).then(function (response) {
@@ -147,10 +156,14 @@ export default {
                 //error
             });
         },
+
+        // función que muestra el detalle de cliente eliminado
         detail(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[6];
             this.$store.state.clienteDetail = cliente;
         },
+
+        // función que restablece un cliente eliminado
         resetCliente(cliente){
             var _this = this;
             const url = "/resetting/cliente/"+cliente.id;
@@ -163,6 +176,8 @@ export default {
                 //error
             });
         },
+
+        // función que retorna a la lista de clientes
         backList(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[2];
         }

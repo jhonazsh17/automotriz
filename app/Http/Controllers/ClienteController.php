@@ -9,6 +9,9 @@ use App\Concesionario;
 
 class ClienteController extends Controller
 {
+    /**
+     * Metodo para guardar el cliente
+     */
     public function save(Request $request){
         try {
 
@@ -36,6 +39,9 @@ class ClienteController extends Controller
         }   
     }
 
+    /**
+     * Método para actualizar cliente 
+     */  
     public function saveUpdate(Request $request){
         $cliente = Cliente::find($request->id);
         $cliente->nombres = $request->nombres;
@@ -53,16 +59,25 @@ class ClienteController extends Controller
         return $cliente;
     }  
 
+    /**
+     * Método para obtener los clientes 
+     */    
     public function getAll(){
         $clientes = Cliente::all();
         return $this->getClientes($clientes);
     }   
 
+    /**
+     * Método para filtrar clientes por concesionario 
+     */     
     public function getClienteByConcesionario($idConcesionario){
         $clientes = Concesionario::find($idConcesionario)->clientes;
         return $this->getClientes($clientes);
     }
 
+    /**
+     * Método para obtener los clientes en un array
+     */     
     private function getClientes($clientes){
         $clientesArray = [];
         $i=0;
@@ -74,6 +89,9 @@ class ClienteController extends Controller
         return $clientesArray;
     }
 
+    /**
+     * Método para obtener clientes por nombres y apellidos 
+     */     
     public function getClienteByName($word){
         $clientes = Cliente::all();
         $clientesArray = [];
@@ -97,6 +115,9 @@ class ClienteController extends Controller
         return $clientesFilter;
     }
 
+    /**
+     * Método para obtener por documento de identidad
+     */     
     public function getClienteByDoc($doc){
         $clientes = Cliente::all();
         $clientesFilter = [];
@@ -113,6 +134,9 @@ class ClienteController extends Controller
         return $clientesFilter;
     }
 
+    /**
+     * Método para comparar cadena en otra
+     */ 
     private function compareCad($cad, $subcad){
         $cad = strtolower($cad);
         $subcad = strtolower($subcad);
@@ -123,6 +147,9 @@ class ClienteController extends Controller
         }
     }        
 
+    /**
+     * Método para eliminar un cliente (cambiar de estado)
+     */     
     public function remove(Request $request){
         $cliente = Cliente::find($request->id);
         $cliente->estado = "0";
@@ -130,6 +157,9 @@ class ClienteController extends Controller
         return $cliente;
     }
     
+    /**
+     * Método para restablecer un cliente
+     */
     public function resetCliente($idCliente){
         $cliente = Cliente::find($idCliente);
         $cliente->estado = "1";

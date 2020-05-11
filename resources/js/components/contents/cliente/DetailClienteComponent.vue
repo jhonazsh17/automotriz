@@ -1,4 +1,5 @@
 <template>
+    <!-- Detalle del cliente -->
     <div>
         <h3>Cliente: {{cliente.nombres}} {{cliente.apellidos}}</h3> 
         <p>
@@ -19,6 +20,7 @@
             </button>
         </div>
     </div> 
+    <!-- fin -->
 </template>
 
 <script>
@@ -29,6 +31,7 @@ export default {
         }
     },
     methods: {
+        // función para retornar a lista de clientes
         backList(){
             console.log('hola');
             this.$store.state.currentContent = this.$store.state.subItems[2];

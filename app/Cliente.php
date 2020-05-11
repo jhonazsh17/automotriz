@@ -8,6 +8,7 @@ class Cliente extends Model
 {
     protected $table = "clientes";
 
+    //Datos del modelo cliente
     protected $fillable = [ 
         'nombres',
         'apellidos',
@@ -23,6 +24,7 @@ class Cliente extends Model
         'concesionario_id', 
     ];
 
+    //Relación one to many (inverso)    
     public function concesionario()
     {
         return $this->belongsTo('App\Concesionario', 'concesionario_id');

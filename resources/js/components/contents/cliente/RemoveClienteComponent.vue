@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- template de cliente a eliminar -->
         <h4>El Cliente: [{{cliente.nombres}} {{cliente.apellidos}}] será removido de tu Lista.</h4>
         <p>
             ¿Estás seguro de realizar esta acción?
@@ -12,6 +13,7 @@
                 <i class="fa fa-arrow-left"></i> Volver
             </button>
         </div>
+        <!-- fin -->
     </div>
 </template>
 
@@ -23,6 +25,7 @@ export default {
         }    
     },
     methods:{
+        // función que elimina de forma asíncronica 
         eliminar(cliente){
             var _this = this;
             const url = "/removing/cliente";
@@ -33,6 +36,8 @@ export default {
                 console.log(error);
             });
         },
+
+        // función que retorna a lista de clientes
         backList(){
             this.$store.state.clienteRemoved = "";
             this.$store.state.clienteEdited = "";

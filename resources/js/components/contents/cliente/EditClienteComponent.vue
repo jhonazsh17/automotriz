@@ -1,9 +1,12 @@
 <template>
     <div>
+        <!-- Alerta de campos obligatorios no vacíos -->
         <div class="alert alert-warning" role="alert" v-if="alertState">
             Los datos obligatorios no deben estar vacíos.
         </div>
+        <!-- fin -->
 
+        <!-- Select para elegir concesionario -->
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group margin-supr-bottom-5">
@@ -16,8 +19,11 @@
                     </select>
                 </div>
             </div>
-        </div>    
+        </div> 
+        <!-- fin -->
         <hr>
+
+        <!-- Inicio del formulario -->
             <div class="row">
                 <div class="col-md-6 padding-supr-right-7">
                     <div class="form-group">
@@ -88,8 +94,7 @@
                 
                 <button class="btn btn-light" @click="backList()"><i class="fa fa-arrow-left" ></i> &nbsp;Volver</button>
             </div>
-            
-            
+        <!-- fin -->
         
     </div>
 </template>
@@ -110,11 +115,14 @@ export default {
     created() {
         this.ubigeo = new Ubigeo();
         this.departamentos = this.ubigeo.getRegions();
+
+        // llama a las siguientes funciones para que carguen datos en el formulario
         this.getAllConcesionarios();
         this.changeDepartamento();
         this.changeProvincia();
     },
     methods: {    
+        // función que guarda los nuevos cambios del cliente
         saveChangesCliente(){
             var _this = this;
             const url = "/sending/new/changes/cliente";
@@ -134,6 +142,8 @@ export default {
                 
             }
         },
+
+        // función que obtienes los concesionarios
         getAllConcesionarios(){
             var _this = this;
             const url = "/getting/concesionarios";
@@ -143,6 +153,8 @@ export default {
                 //error
             });
         },
+
+        // función para validar campos del formulario
         validateInputs(){
             if(this.cliente.concesionarios!=""&&
                 this.cliente.departamentos!=""&&
@@ -158,13 +170,19 @@ export default {
                 return false;
             }
         },
+
+        // función que retorna al template de lista de clientes
         backList(){
             console.log('hola');
             this.$store.state.currentContent = this.$store.state.subItems[2];
         },
+
+        //función para obtener provincias cuando se elige un departamento
         changeDepartamento(){
             this.provincias = this.ubigeo.getRegions(this.cliente.departamento).provinces();
         },
+
+        // función para obtener distritos cuando se elige una provincia
         changeProvincia(){
             this.distritos = this.ubigeo.getProvinces(this.cliente.provincia).districts();
         }
