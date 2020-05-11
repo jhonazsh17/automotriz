@@ -8,6 +8,7 @@
             Ciudad: {{cliente.ciudad}}<br>
             Provincia: {{cliente.provincia}}<br>
             Departamento: {{cliente.departamento}}<br>
+            Concesionario: <b>{{cliente['concesionario']['nombre']}}</b><br>
             Estado: <span class="badge badge-warning" v-if="cliente.estado==1">Activo</span>
                     <span v-else class="badge badge-secondary">De Baja</span>
         </p>
