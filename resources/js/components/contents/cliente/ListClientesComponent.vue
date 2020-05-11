@@ -1,13 +1,16 @@
 <template>
     <div>
         <div class="alert alert-success" role="alert" v-if="$store.state.clienteEdited!=''">
-            Se ha actualizado el cliente <b>[{{$store.state.clienteEdited.nombres}} {{$store.state.clienteEdited.apellidos}}], con éxito</b>. 
+            Se ha actualizado el cliente <b>[{{$store.state.clienteEdited.nombres}} {{$store.state.clienteEdited.apellidos}}]</b>, con éxito. 
         </div>
         <div class="alert alert-success" role="alert" v-if="$store.state.clienteInserted!=''">
-            Se ha creado el cliente <b>[{{$store.state.clienteInserted.nombres}} {{$store.state.clienteInserted.apellidos}}], con éxito</b>. 
+            Se ha creado el cliente <b>[{{$store.state.clienteInserted.nombres}} {{$store.state.clienteInserted.apellidos}}]</b>, con éxito. 
         </div>
         <div class="alert alert-success" role="alert" v-if="$store.state.clienteRemoved!=''">
             Se ha eliminado el cliente <b>[{{$store.state.clienteRemoved.nombres}} {{$store.state.clienteRemoved.apellidos}}]</b>. 
+        </div>
+        <div class="alert alert-success" role="alert" v-if="$store.state.clienteReset!=''">
+            Se ha restablecido el cliente <b>[{{$store.state.clienteReset.nombres}} {{$store.state.clienteReset.apellidos}}]</b>. 
         </div>
         <div>
             <div v-if="loading" class="text-center">
@@ -84,7 +87,7 @@
                             <td class="text-center">{{index+1}}</td>
                             <td><a href="#" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
-                            <td class="text-center">{{cliente.concesionario_id}}</td>
+                            <td class="text-center"><a href="#" class="badge badge-warning" @click.prevent="filterInListConcesionario(cliente.concesionario_id)">{{cliente.concesionario_name}}</a></td>
                             <td>{{cliente.direccion}}</td>
                             <td class="text-center">{{ubigeo.getDistricts(cliente.ciudad).name}}</td>
                             <td class="text-center">{{ubigeo.getProvinces(cliente.provincia).name}}</td>
@@ -112,21 +115,7 @@
                                 <i class="fas fa-trash-restore-alt" ></i> Clientes Eliminados
                             </button>
                         </div>
-                        <div class="col-md-6">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        
                     </div>
                     
                 </div>
@@ -162,6 +151,7 @@ export default {
             _this.$store.state.clienteEdited = "";
             _this.$store.state.clienteInserted = "";
             _this.$store.state.clienteRemoved = "";
+            _this.$store.state.clienteReset = "";
         }, 3000);
         
     },
@@ -179,6 +169,10 @@ export default {
             }).catch(function (error) {
                 //error
 			});
+        },
+        filterInListConcesionario(concesionario_id){
+            this.filterValue = concesionario_id;
+            this.filterConcesionario();
         },
         filterConcesionario(){
             var _this = this;

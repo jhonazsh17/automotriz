@@ -26,9 +26,7 @@ export default {
         eliminar(cliente){
             var _this = this;
             const url = "/removing/cliente";
-            console.log(cliente);
             axios.put(url, cliente).then(function (response) {
-                console.log(response.data);
                 _this.$store.state.clienteRemoved = response.data;
                 _this.$store.state.currentContent = _this.$store.state.subItems[2];
             }).catch(function (error) {

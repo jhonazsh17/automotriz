@@ -55,6 +55,15 @@ class ClienteController extends Controller
 
     public function getAll(){
         $clientes = Cliente::all();
+        return $this->getClientes($clientes);
+    }   
+
+    public function getClienteByConcesionario($idConcesionario){
+        $clientes = Concesionario::find($idConcesionario)->clientes;
+        return $this->getClientes($clientes);
+    }
+
+    private function getClientes($clientes){
         $clientesArray = [];
         $i=0;
         foreach ($clientes as $cliente) {
@@ -63,11 +72,6 @@ class ClienteController extends Controller
             $i=$i+1;
         }
         return $clientesArray;
-    }   
-
-    public function getClienteByConcesionario($idConcesionario){
-        $clientes = Concesionario::find($idConcesionario)->clientes;
-        return $clientes;
     }
 
     public function getClienteByName($word){
@@ -85,6 +89,7 @@ class ClienteController extends Controller
         foreach ($clientesArray as $cliente) {
             if($this->compareCad($cliente['fullName'], $word)){
                 $clientesFilter[$j] = $cliente;
+                $clientesFilter[$j]['concesionario_name'] = $cliente->concesionario->nombre;
                 $j=$j+1;
             }
             
@@ -100,6 +105,7 @@ class ClienteController extends Controller
         foreach ($clientes as $cliente) {
             if($this->compareCad($cliente['dni'], $doc)){
                 $clientesFilter[$j] = $cliente;
+                $clientesFilter[$j]['concesionario_name'] = $cliente->concesionario->nombre;
                 $j=$j+1;
             }
             
@@ -118,7 +124,7 @@ class ClienteController extends Controller
     }        
 
     public function remove(Request $request){
-        $cliente = Cliente::where('dni', $request->dni)->first();
+        $cliente = Cliente::find($request->id);
         $cliente->estado = "0";
         $cliente->save();
         return $cliente;

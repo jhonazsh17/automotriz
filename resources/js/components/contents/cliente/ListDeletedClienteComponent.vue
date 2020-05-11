@@ -111,7 +111,6 @@ export default {
             axios.get(url).then(function (response) {
                 _this.currentClientes = [];
                 _this.clientes = response.data;
-                this.$store.state.currentContent = this.$store.state.subItems[2];
                 _this.clientes.forEach(function(element){
                     if(element.estado=='0'){
                         _this.currentClientes.push(element);
@@ -156,7 +155,10 @@ export default {
             var _this = this;
             const url = "/resetting/cliente/"+cliente.id;
             axios.put(url).then(function (response) {
-                console.log(response.data);
+                if(response.data){
+                    _this.$store.state.currentContent = _this.$store.state.subItems[2];
+                    _this.$store.state.clienteReset = response.data;
+                }
             }).catch(function (error) {
                 //error
             });

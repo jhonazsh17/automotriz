@@ -5,6 +5,7 @@ export default {
 		clienteInserted: "",
 		clienteEdit: "",
 		clienteEdited: "",
+		clienteReset: "",
 		clienteRemove: "",
 		clienteDetail: "",
 		clienteRemoved: "",
