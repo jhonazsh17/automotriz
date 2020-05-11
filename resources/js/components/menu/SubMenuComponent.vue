@@ -20,12 +20,10 @@ export default {
     },
     created(){
         this.$store.state.currentContent = this.subItems[0];
-        console.log(this.$store.state.currentContent);
     },
     methods: {
         showContent(subItem) {
             this.$store.state.currentContent = subItem;
-            //this.$emit('getEmitContent', subItem);  
         }
     }
 }

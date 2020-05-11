@@ -147,9 +147,13 @@ export default {
             
         },
         getAllConcesionarios(){
-            this.$store.commit('loadConcesionarios()');
-            this.concesionarios = this.$store.state.concesionarios;
-            console.log("esto"+this.concesionarios);
+            var _this = this;
+            const url = "/getting/concesionarios";
+            axios.get(url).then(function (response) {
+				_this.concesionarios = response.data; 
+            }).catch(function (error) {
+                //error
+			});
         },
         validateInputs(){
             if(this.cliente.concesionarios!=""&&

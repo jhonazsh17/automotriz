@@ -18,6 +18,9 @@
         <div class="col-md-12" v-if="$store.state.currentContent.id==6">
             <detail-cliente-component></detail-cliente-component>
         </div>
+        <div class="col-md-12" v-if="$store.state.currentContent.id==7">
+            <list-deleted-cliente-component></list-deleted-cliente-component>
+        </div>
     </div>
 </template>
 
@@ -29,6 +32,7 @@ import PanelComponent from './PanelComponent.vue';
 import EditClienteComponent from './cliente/EditClienteComponent.vue';
 import RemoveClienteComponent from './cliente/RemoveClienteComponent.vue';
 import DetailClienteComponent from './cliente/DetailClienteComponent.vue';
+import ListDeletedClienteComponent from './cliente/ListDeletedClienteComponent.vue';
 
 export default {
     props: ['content'],
@@ -43,7 +47,8 @@ export default {
         PanelComponent,
         EditClienteComponent,
         RemoveClienteComponent,
-        DetailClienteComponent
+        DetailClienteComponent,
+        ListDeletedClienteComponent,
     }
 }
 </script>

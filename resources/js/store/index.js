@@ -51,22 +51,21 @@ export default {
 				id: 6,
 				parent: 1,
 				inMenu: false
+			},
+			{
+				title: "Clientes Eliminados",
+				id: 7,
+				parent: 1,
+				inMenu: false
 			}
 		],
 		concesionarios: [],
     },
 	getters: {},
-	actions: {},
+	actions: {
+		
+	},
 	mutations: {
-		loadConcesionarios(state){
-            const url = "/getting/concesionarios";
-            axios.get(url).then(function (response) {
-				state.concesionarios = response.data;  
-				
-            }).catch(function (error) {
-                //error
-			});
-			
-		}
+		
     }
 }

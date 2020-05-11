@@ -1,46 +1,18 @@
 <template>
     <div>
-        <div class="alert alert-success" role="alert" v-if="$store.state.clienteEdited!=''">
-            Se ha actualizado el cliente <b>[{{$store.state.clienteEdited.nombres}} {{$store.state.clienteEdited.apellidos}}], con éxito</b>. 
-        </div>
-        <div class="alert alert-success" role="alert" v-if="$store.state.clienteInserted!=''">
-            Se ha creado el cliente <b>[{{$store.state.clienteInserted.nombres}} {{$store.state.clienteInserted.apellidos}}], con éxito</b>. 
-        </div>
-        <div class="alert alert-success" role="alert" v-if="$store.state.clienteRemoved!=''">
-            Se ha eliminado el cliente <b>[{{$store.state.clienteRemoved.nombres}} {{$store.state.clienteRemoved.apellidos}}]</b>. 
-        </div>
+        
         <div>
             <div v-if="loading" class="text-center">
                 Cargando...
             </div>
             <div v-else>
                 <div class="row">
-                    <div class="col-md-4 padding-supr-right-7">
+                    <div class="col-md-4">
                         <input class="form-control" placeholder="Buscar Cliente"/>
                     </div>
-                    <div class="col-md-4 padding-supr-left-7">
-                        <div class="btn-group">
-                            
-                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Concesionarios
-                            </button>
-                            <div class="dropdown-menu">
-                                <a v-for="(concesionario, index) in concesionarios" :key="index" class="dropdown-item" href="#">
-                                    {{concesionario.nombre}}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 padding-supr-left-7 text-right">
-                        <div class="btn-group">
-                            
-                            <button @click="goCrearCliente()" class="btn btn-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Crear Cliente
-                            </button>
-                        </div>
-                    </div>
+                    
                 </div>
-                <table class="table table-bordered table-striped" style="margin-top:1.3em">
+                <table class="table table-bordered" style="margin-top:1.3em">
                     <thead>
                         <tr class="text-center">
                             <th>
@@ -73,9 +45,9 @@
                         </tr>
                     </thead>
                     <tbody v-if="currentClientes.length>0">
-                        <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index">
+                        <tr  v-for="(cliente, index) in currentClientes" v-bind:key="index" style="color:#bbb">
                             <td class="text-center">{{index+1}}</td>
-                            <td><a href="#" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
+                            <td><a href="#" style="color:#bbb" @click.prevent="detail(cliente)">{{cliente.nombres}} {{cliente.apellidos}}</a></td>
                             <td class="text-center">{{cliente.dni}}</td>
                             <td class="text-center">{{cliente.nro_telefono}}</td>
                             <td>{{cliente.direccion}}</td>
@@ -83,8 +55,7 @@
                             <td class="text-center">{{ubigeo.getProvinces(cliente.provincia).name}}</td>
                             <td class="text-center">{{ubigeo.getRegions(cliente.departamento).name}}</td>
                             <td width="200px" class="text-center">
-                                <button class="btn btn-light btn-sm" @click="editCliente(cliente)"><i class="far fa-edit"></i> Editar</button>
-                                <button class="btn btn-light btn-sm" @click="removeCliente(cliente)"><i class="far fa-trash-alt"></i> Eliminar</button>
+                                <button class="btn btn-light btn-sm" @click="editCliente(cliente)"><i class="far fa-edit"></i> Restablecer</button>
                             </td>
                         </tr>
                     </tbody>
@@ -99,8 +70,8 @@
                 </table>
                 <hr>
                 <div>
-                    <button class="btn btn-light" @click="goClientesDeleted()">
-                        <i class="fas fa-trash-restore-alt" ></i> Clientes Eliminados
+                    <button class="btn btn-light">
+                        <i class="fas fa-trash-restore-alt"></i> Clientes Eliminados
                     </button>
                 </div>
             </div>
@@ -120,7 +91,6 @@ export default {
             clientes: [],
             currentClientes: [],
             ubigeo:"",
-            concesionarios: this.$store.commit('loadConcesionarios')
         }
     },
     created(){
@@ -142,7 +112,7 @@ export default {
             axios.get(url).then(function (response) {
                 _this.clientes = response.data;
                 _this.clientes.forEach(function(element){
-                    if(element.estado==1){
+                    if(element.estado==0){
                         _this.currentClientes.push(element); 
                     }
                 });
@@ -174,9 +144,6 @@ export default {
         },
         goCrearCliente(cliente){
             this.$store.state.currentContent = this.$store.state.subItems[1];
-        },
-        goClientesDeleted(cliente){
-            this.$store.state.currentContent = this.$store.state.subItems[7];
         }
     }
 }
