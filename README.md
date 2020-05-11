@@ -27,7 +27,7 @@ con esto se obtiene todas las dependencias y subdependencias de composer.
 Del mismo modo se ejecuta el comando:
 
 ~~~
-composer install
+npm install
 ~~~
 
 con esto se obtiene todas las dependencias y subdependencias de node.
